@@ -43,3 +43,9 @@ class LogInView(TemplateView):
         else:
             messages.error(request, 'Bad username or password.')
         return redirect('user:login')
+
+
+class LogOut:
+    def get(self, request):
+        logout(request)
+        return redirect("/")
