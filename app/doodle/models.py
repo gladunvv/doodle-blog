@@ -9,8 +9,6 @@ class Post(models.Model):
     author = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
     text = models.TextField(max_length=140)
     published_date = models.DateTimeField(blank=True, null=True)
-    comments = models.ForeignKey('Comment', blank=True, related_name='comments_posts', on_delete=models.CASCADE)
-    tags = models.ManyToManyField('Tag', blank=True, related_name='tags_posts')
 
 
     def published(self):
@@ -25,6 +23,7 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
+    post = models.ForeignKey(Post, blank=True, related_name='posts_coments', on_delete=models.CASCADE)
     author = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
     text = models.TextField(max_length=140)
     create_date = models.DateTimeField(default=timezone.now)
@@ -39,6 +38,7 @@ class Comment(models.Model):
 
 
 class Tag(models.Model):
+    post = models.ManyToManyField(Post, blank=True, related_name='tags_posts')
     title = models.CharField(max_length=30)
     slug = models.SlugField(max_length=30, unique=True)
 
