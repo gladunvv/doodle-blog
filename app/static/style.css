@@ -1,0 +1,10 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    height: 70px;
+    background: #f1f1f1;
+    box-shadow: 1px 3px 6px #c1c1c1;
+}
