@@ -14,7 +14,6 @@ class PostsListView(ListView):
         follow_list = [user]
         for f in followers:
             follow_list.append(f.follower)
-        print(follow_list)
         posts = Post.objects.filter(author__in=follow_list).order_by('-published_date')
         data = {
             'posts': posts,
