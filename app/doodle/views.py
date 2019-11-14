@@ -18,4 +18,4 @@ class PostsListView(ListView):
         data = {
             'posts': posts,
         }
-        return render(request, self.template_name, data)
+        return render(request, self.template_name, data)    
