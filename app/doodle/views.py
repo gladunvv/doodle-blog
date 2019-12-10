@@ -9,7 +9,7 @@ class PostsListView(ListView):
     template_name = 'doodle/index.html'
 
     def get(self, request):
-        user = get_user_model().objects.get(username='vlad')
+        user = request.user
         followers = user.who_follows.all()
         follow_list = [user]
         for f in followers:
