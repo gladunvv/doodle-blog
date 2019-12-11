@@ -9,13 +9,15 @@ class PostsListView(ListView):
     template_name = 'doodle/index.html'
 
     def get(self, request):
-        user = request.user
+        user = get_user_model().objects.get(username='vlad')
         followers = user.who_follows.all()
         follow_list = [user]
         for f in followers:
             follow_list.append(f.follower)
         posts = Post.objects.filter(author__in=follow_list).order_by('-published_date')
-        data = {
+        context = {
             'posts': posts,
+            'activate': 'index'
         }
-        return render(request, self.template_name, data)    
+        return render(request, self.template_name, context)    
+
