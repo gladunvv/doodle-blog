@@ -1,0 +1,15 @@
+
+<div>
+
+
+    <a {% if activate == 'index' %}class="active"{% endif %}  href="{% url 'doodle:index' %}">INDEX</a>
+{% if user.is_authenticated %}  
+    <a href="{% url 'user:logout' %}"> LOGOUT </a>
+    <a {% if activate == 'profile' %}class="active"{% endif %} href="{% url 'user:profile' %}">PROFILE</a>
+
+{% else %}
+    <a {% if activate == 'login' %}class="active"{% endif %} href="{% url 'user:login' %}">LOGIN</a>
+    <a {% if activate == 'signup' %}class="active"{% endif %} href="{% url 'user:signup' %}">SIGNUP</a>
+
+{% endif %}
+</div>
