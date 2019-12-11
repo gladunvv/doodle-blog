@@ -6,6 +6,26 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from user.forms import UserSignupForm, UserLoginForm
+from django.contrib.auth import get_user_model
+from doodle.models import Post
+
+
+class ProfileView(TemplateView):
+
+    template_name = 'user/profile.html'
+    
+    def get(self, request, *args, **kwargs):
+        user = get_user_model().objects.get(username='vlad')
+        posts = Post.objects.filter(author=user)
+        context = {
+            'profile': user,
+            'posts': posts,
+            'activate': 'profile'
+
+        }
+        return render(request, self.template_name, context)
+        
+
 
 
 class SignUpView(TemplateView):
@@ -15,7 +35,11 @@ class SignUpView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         form = self.form_class(initial=self.initial)
-        return render(request, self.template_name, {'form': form})
+        context = {
+            'form': form,
+            'activate': 'signup'
+        }
+        return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -24,7 +48,11 @@ class SignUpView(TemplateView):
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}.')
             return redirect('user:login')
-        return render(request, self.template_name, {'form': form})
+        context = {
+            'form': form,
+            'activate': 'signup'
+        }
+        return render(request, self.template_name, context)
 
 
 class LogInView(TemplateView):
@@ -33,7 +61,11 @@ class LogInView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         form = UserLoginForm()
-        return render(request, self.template_name, {'form': form})
+        context = {
+            'form': form,
+            'activate': 'login'
+        }
+        return render(request, self.template_name, context)
 
 
     def post(self, request, *args, **kwargs):
@@ -42,7 +74,7 @@ class LogInView(TemplateView):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('/')
+            return redirect('doodle:index')
         else:
             messages.error(request, 'Bad username or password.')
         return redirect('user:login')
@@ -51,4 +83,4 @@ class LogInView(TemplateView):
 class LogOutView(TemplateView):
     def get(self, request):
         logout(request)
-        return redirect("/")
+        return redirect('doodle:index')
