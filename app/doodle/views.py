@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 from doodle.models import Post, Comment, Tag
 from user.models import Follow
 from django.contrib.auth import get_user_model
+from doodle.forms import AddCommentForm
 
 class PostsListView(ListView):
 
@@ -21,3 +22,15 @@ class PostsListView(ListView):
         }
         return render(request, self.template_name, context)    
 
+class PostDetailView(TemplateView):
+
+    template_name = 'doodle/post_detail.html'
+
+    def get(self, request, pk):
+        post = Post.objects.get(pk=pk)
+        add_comment = AddCommentForm()
+        context = {
+            'post': post,
+            'add_comment': add_comment
+        }
+        return render(request, self.template_name, context)
