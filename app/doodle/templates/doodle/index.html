@@ -6,9 +6,16 @@ Index page
 {% block content %}
 
 {% for post in posts %}
-{{ post.author }} <br>
-{{ post.text }} <br>
-{{ post.published_date | date:"H:i l, d.m.y" }} <br> <br>
+ <div class="post">
+     <a href="{% url "doodle:post_detail" post.pk %}">
+        
+          {{ post.author }} <br>
+          {{ post.text }} <br>
+          {{ post.published_date|date:"H:i l, d.m.y" }} <br> <br>
+
+     </a>
+ </div>
+
 {% endfor %}
 
 {% endblock %}
