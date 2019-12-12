@@ -4,9 +4,9 @@ from django.urls import path, include
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path('', include('doodle.urls', namespace='doodle')),
     path('admin/', admin.site.urls),
     path('user/', include('user.urls', namespace='user')),
-    path('doodle/', include('doodle.urls', namespace='doodle')),
 ]
 
 if settings.DEBUG:
