@@ -10,7 +10,7 @@ class PostsListView(ListView):
     template_name = 'doodle/index.html'
 
     def get(self, request):
-        user = get_user_model().objects.get(username='vlad')
+        user = request.user
         followers = user.who_follows.all()
         follow_list = [user]
         for f in followers:
@@ -22,15 +22,31 @@ class PostsListView(ListView):
         }
         return render(request, self.template_name, context)    
 
+
 class PostDetailView(TemplateView):
 
     template_name = 'doodle/post_detail.html'
 
     def get(self, request, pk):
         post = Post.objects.get(pk=pk)
-        add_comment = AddCommentForm()
+        form = AddCommentForm()
         context = {
             'post': post,
-            'add_comment': add_comment
+            'add_comment': form
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, pk):
+        post = Post.objects.get(pk=pk)
+        form = AddCommentForm(request.POST)
+        if form.is_valid():
+            text = form.cleaned_data.get('text')
+            comment = Comment(
+                text=text, author=request.user, post=post)
+            comment.save()
+            form = AddCommentForm()
+        context = {
+            'post': post,
+            'add_comment': form
         }
         return render(request, self.template_name, context)

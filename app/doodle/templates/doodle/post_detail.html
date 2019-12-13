@@ -14,6 +14,13 @@
                     <button class="btn btn-outline-info" type="submit">Add</button>
             </form>
 
-
-
+            {% if post.posts_coments.all %}
+            Comments: ({{ post.posts_coments.all.count }})
+            {% for comment in post.posts_coments.all %}
+            <br>
+            <small class="text-muted">{{ comment.author.username }}: </small>{{ comment.text }}<br>
+         {% endfor %}
+         {% else %}
+             <small class="text-muted">Be the first to comment.</small>
+        {% endif %}
 {% endblock %}
