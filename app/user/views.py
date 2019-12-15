@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from user.forms import UserSignupForm, UserLoginForm
+from user.forms import UserSignupForm, UserLoginForm, UserProfileForm
 from django.contrib.auth import get_user_model
 from doodle.models import Post
 
@@ -15,7 +15,7 @@ class ProfileView(TemplateView):
     template_name = 'user/profile.html'
     
     def get(self, request, *args, **kwargs):
-        user = get_user_model().objects.get(username='vlad')
+        user = request.user
         posts = Post.objects.filter(author=user)
         context = {
             'profile': user,
@@ -25,6 +25,19 @@ class ProfileView(TemplateView):
         }
         return render(request, self.template_name, context)
         
+
+class UpdateProfileView(TemplateView):
+
+    template_name = 'user/update_profile.html'
+
+    def get(self, request, *rags, **kwargs):
+        user = request.user
+        form = UserProfileForm()
+        context = {
+            'user': user,
+            'form': form,
+        }
+        return render(request, self.template_name, context)
 
 
 
