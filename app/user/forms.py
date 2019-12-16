@@ -22,6 +22,8 @@ class UserLoginForm(AuthenticationForm):
 
 class UserProfileForm(forms.ModelForm):
 
+    birth_date = forms.DateField(label='Birthday', widget=forms.SelectDateWidget)
+    
     class Meta:
         model = Profile
         fields = ['bio', 'birth_date']

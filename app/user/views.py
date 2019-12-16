@@ -8,6 +8,7 @@ from django.utils.decorators import method_decorator
 from user.forms import UserSignupForm, UserLoginForm, UserProfileForm
 from django.contrib.auth import get_user_model
 from doodle.models import Post
+from user.models import Profile
 
 
 class ProfileView(TemplateView):
@@ -21,7 +22,6 @@ class ProfileView(TemplateView):
             'profile': user,
             'posts': posts,
             'activate': 'profile'
-
         }
         return render(request, self.template_name, context)
         
@@ -39,6 +39,14 @@ class UpdateProfileView(TemplateView):
         }
         return render(request, self.template_name, context)
 
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        form_profile = UserProfileForm(request.POST, instance=user.profile)
+        if form_profile.is_valid():
+            form_profile.save()
+            return redirect('user:profile')
+        else:
+            return redirect('user:update_profile')
 
 
 class SignUpView(TemplateView):
