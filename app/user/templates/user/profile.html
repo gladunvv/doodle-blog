@@ -18,7 +18,8 @@
     {% for post in posts %}
 
         {{ post.text }} <br>
-        {{ post.published_date }} <br><br> 
+        {{ post.published_date }} <br>
+        <a href="{% url "doodle:delete_post" post.id %}">Delete Post</a><br><br> 
     {% endfor %}
 
 {% endblock %}

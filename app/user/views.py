@@ -24,7 +24,7 @@ class ProfileView(TemplateView):
             'activate': 'profile'
         }
         return render(request, self.template_name, context)
-        
+    
 
 class UpdateProfileView(TemplateView):
 

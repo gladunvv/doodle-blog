@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, TemplateView
+from django.views.generic import ListView, TemplateView, View
 from doodle.models import Post, Comment, Tag
 from user.models import Follow
 from django.contrib.auth import get_user_model
@@ -78,3 +78,12 @@ class CreatePost(TemplateView):
             'form': form
         }
         return render(request, self.template_name, context)
+
+class DeletePost(View):
+
+
+    def get(self, request, pk):
+        post = Post.objects.get(pk=pk)
+        post.delete()
+        return redirect('user:profile')
+
