@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, TemplateView
 from doodle.models import Post, Comment, Tag
 from user.models import Follow
 from django.contrib.auth import get_user_model
-from doodle.forms import AddCommentForm
+from doodle.forms import AddCommentForm, AddPost
 
 class PostsListView(ListView):
 
@@ -48,5 +48,33 @@ class PostDetailView(TemplateView):
         context = {
             'post': post,
             'add_comment': form
+        }
+        return render(request, self.template_name, context)
+
+
+class CreatePost(TemplateView):
+
+    template_name = 'doodle/added_post.html'
+
+    def get(self, request):
+        form = AddPost()
+        context = {
+            'form': form
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        user = request.user
+        form = AddPost(request.POST)
+        if form.is_valid():
+            text = form.cleaned_data.get('text')
+            post = Post(
+                text=text, author=user
+            )
+            post.published()
+            post.save()
+            return redirect('user:profile')
+        context = {
+            'form': form
         }
         return render(request, self.template_name, context)

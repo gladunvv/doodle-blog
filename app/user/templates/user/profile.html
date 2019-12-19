@@ -14,6 +14,7 @@
     {{profile.profile.bio}}
     {{profile.profile.birth_date}}
 
+    <a href="{% url "doodle:create_post" %}">Create New Post</a> <br>
     {% for post in posts %}
 
         {{ post.text }} <br>
@@ -21,4 +22,3 @@
     {% endfor %}
 
 {% endblock %}
-
