@@ -79,10 +79,18 @@ class CreatePost(TemplateView):
         }
         return render(request, self.template_name, context)
 
-class DeletePost(View):
+class DeletePost(TemplateView):
 
+    template_name = 'doodle/delete_post.html'
 
     def get(self, request, pk):
+        post = Post.objects.get(pk=pk)
+        context = {
+            'post': post
+        }
+        return render(request, self.template_name, context)
+    
+    def post(self, request, pk):
         post = Post.objects.get(pk=pk)
         post.delete()
         return redirect('user:profile')

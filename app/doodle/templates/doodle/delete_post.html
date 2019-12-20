@@ -1,0 +1,16 @@
+{% extends 'doodle/base.html' %}
+{% block content %}
+
+    {{ post.author }}, вы действительно хотите удалить пост: <br>
+    {{ post.text }} <br>
+    <small>
+        {{ post.published_date|date:"F d, Y" }} 
+    </small>
+
+    <br><br>
+ <form action="" method="POST">
+                {% csrf_token %}
+                    <a href="{% url "user:profile" %}">Нет</a>
+                    <button class="btn btn-outline-info" type="submit">Да</button>
+</form>
+{% endblock %}
