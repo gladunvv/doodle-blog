@@ -105,3 +105,19 @@ class LogOutView(TemplateView):
     def get(self, request):
         logout(request)
         return redirect('doodle:index')
+
+
+class DeleteUserView(TemplateView):
+    template_name = 'user/delete_user.html'
+
+    def get(self, request):
+        user = request.user
+        context = {
+            'user': user
+        }
+        return render(request, self.template_name, context)
+    
+    def post(self, request):
+        user = request.user
+        user.delete()
+        return redirect('user:signup')

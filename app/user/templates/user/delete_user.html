@@ -1,0 +1,12 @@
+{% extends 'doodle/base.html' %}
+{% block content %}
+
+    Уважаемый {{ user.last_name }} {{ user.first_name }}, вы действительно хотите удалить аккаунт
+
+    <br><br>
+ <form action="" method="POST">
+                {% csrf_token %}
+                    <a href="{% url "user:profile" %}">Нет</a>
+                    <button class="" type="submit">Да</button>
+</form>
+{% endblock %}

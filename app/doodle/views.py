@@ -94,4 +94,3 @@ class DeletePost(TemplateView):
         post = Post.objects.get(pk=pk)
         post.delete()
         return redirect('user:profile')
-

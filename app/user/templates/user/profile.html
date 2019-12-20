@@ -4,6 +4,8 @@
     <h1>
         {{ profile.first_name }} {{ profile.last_name }}
     </h1>
+
+<a href="{% url "user:delete" %}">УДАЛИТЬ АККАУНТ</a>
     <h2>
         <a href="{% url "user:profile_update" %}">
 
