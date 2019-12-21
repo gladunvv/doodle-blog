@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from user.models import Profile
-
+from dobwidget import DateOfBirthWidget
 
 class UserSignupForm(UserCreationForm):
 
@@ -24,8 +24,9 @@ class UserLoginForm(AuthenticationForm):
 
 class UserProfileForm(forms.ModelForm):
 
-    birth_date = forms.DateField(label='Birthday', widget=forms.SelectDateWidget)
-    
     class Meta:
         model = Profile
         fields = ['bio', 'birth_date']
+        widgets = {
+            'birth_date': DateOfBirthWidget(),
+        }

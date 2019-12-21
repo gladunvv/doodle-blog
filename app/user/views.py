@@ -104,7 +104,7 @@ class LogInView(TemplateView):
 class LogOutView(TemplateView):
     def get(self, request):
         logout(request)
-        return redirect('doodle:index')
+        return redirect('user:login')
 
 
 class DeleteUserView(TemplateView):
