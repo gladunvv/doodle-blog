@@ -1,5 +1,5 @@
 {% extends 'doodle/base.html' %}
-
+{% load thumbnail %}
 {% block content %}
     <h1>
         {{ profile.first_name }} {{ profile.last_name }}
@@ -15,6 +15,13 @@
 
     {{profile.profile.bio}}
     {{profile.profile.birth_date}}
+
+    {% thumbnail profile.profile.avatar "100x100" crop="center" as av %}
+    <img style="margin:{{ av|margin:"100x100" }}" src="{{ av.url }}" width="{{ av.x }}" height="{{ av.y }}">
+{% endthumbnail %}
+  
+    <br>
+    <br>
 
     <a href="{% url "doodle:create_post" %}">Create New Post</a> <br>
     {% for post in posts %}

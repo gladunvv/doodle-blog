@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 
     'debug_toolbar',
     'crispy_forms',
+    'sorl.thumbnail',
 
     'doodle.apps.DoodleConfig',
     'user.apps.UserConfig',
@@ -138,6 +139,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+print(MEDIA_ROOT)
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]

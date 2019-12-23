@@ -41,12 +41,13 @@ class UpdateProfileView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         user = request.user
-        form_profile = UserProfileForm(request.POST, instance=user.profile)
-        if form_profile.is_valid():
+        form_profile = UserProfileForm(request.POST, request.FILES, instance=user.profile)
+        print('------------>',request.FILES)
+        if form_profile.is_valid(): 
             form_profile.save()
             return redirect('user:profile')
         else:
-            return redirect('user:update_profile')
+            return redirect('user:profile_update')
 
 
 class SignUpView(TemplateView):

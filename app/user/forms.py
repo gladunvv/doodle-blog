@@ -4,6 +4,9 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from user.models import Profile
 from dobwidget import DateOfBirthWidget
 
+from django.contrib.admin.widgets import AdminDateWidget
+
+
 class UserSignupForm(UserCreationForm):
 
     email = forms.EmailField()
@@ -23,10 +26,9 @@ class UserLoginForm(AuthenticationForm):
 
 
 class UserProfileForm(forms.ModelForm):
-
+    years = [int(i) for i in range(1920, 2019)]
+    birth_date = forms.DateField(widget=forms.SelectDateWidget(years=years))
     class Meta:
         model = Profile
-        fields = ['bio', 'birth_date']
-        widgets = {
-            'birth_date': DateOfBirthWidget(),
-        }
+        fields = ['bio', 'birth_date', 'avatar']
+
