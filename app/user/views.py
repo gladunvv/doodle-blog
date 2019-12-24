@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -8,8 +8,36 @@ from django.utils.decorators import method_decorator
 from user.forms import UserSignupForm, UserLoginForm, UserProfileForm
 from django.contrib.auth import get_user_model
 from doodle.models import Post
-from user.models import Profile
+from user.models import Profile, Follow
 
+
+
+class UsersProfileView(TemplateView):
+
+    template_name = 'user/users_profile.html'
+
+    def visible_user(self):
+        return get_object_or_404(get_user_model(), username=self.kwargs.get('username'))
+
+    def get(self, request, **kwargs):
+        posts = Post.objects.filter(author=self.visible_user())
+        context = {
+            'profile': self.visible_user(),
+            'posts': posts
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        follows_between = Follow.objects.filter(following=request.user,
+                                                    who_is_followed=self.visible_user())
+        if 'follow' in request.POST:
+                new_relation = Follow(following=request.user, who_follows=self.visible_user())
+                if follows_between.count() == 0:
+                    new_relation.save()
+        elif 'unfollow' in request.POST:
+                if follows_between.count() > 0:
+                    follows_between.delete()
+        return render(request, self.template_name)
 
 class ProfileView(TemplateView):
 
@@ -17,14 +45,14 @@ class ProfileView(TemplateView):
     
     def get(self, request, *args, **kwargs):
         user = request.user
-        posts = Post.objects.filter(author=user)
+        posts = Post.objects.filter(author=user).order_by('-published_date')
         context = {
             'profile': user,
             'posts': posts,
             'activate': 'profile'
         }
         return render(request, self.template_name, context)
-    
+
 
 class UpdateProfileView(TemplateView):
 
@@ -42,7 +70,6 @@ class UpdateProfileView(TemplateView):
     def post(self, request, *args, **kwargs):
         user = request.user
         form_profile = UserProfileForm(request.POST, request.FILES, instance=user.profile)
-        print('------------>',request.FILES)
         if form_profile.is_valid(): 
             form_profile.save()
             return redirect('user:profile')
