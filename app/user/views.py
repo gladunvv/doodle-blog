@@ -28,16 +28,25 @@ class UsersProfileView(TemplateView):
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
+        posts = Post.objects.filter(author=self.visible_user())
         follows_between = Follow.objects.filter(following=request.user,
-                                                    who_is_followed=self.visible_user())
+                                                    follower=self.visible_user())
+        can_follow = (Follow.objects.filter(following=request.user,
+                                                follower=self.visible_user()).count() == 0)
         if 'follow' in request.POST:
-                new_relation = Follow(following=request.user, who_follows=self.visible_user())
+                new_relation = Follow(following=request.user, follower=self.visible_user())
                 if follows_between.count() == 0:
                     new_relation.save()
         elif 'unfollow' in request.POST:
                 if follows_between.count() > 0:
                     follows_between.delete()
-        return render(request, self.template_name)
+        context = {
+            'profile': self.visible_user(),
+            'posts': posts,
+            'can_follow': can_follow
+        }
+        return render(request, self.template_name, context)
+
 
 class ProfileView(TemplateView):
 
@@ -149,3 +158,32 @@ class DeleteUserView(TemplateView):
         user = request.user
         user.delete()
         return redirect('user:signup')
+
+class FollowsView(TemplateView):
+
+    template_name = 'user/follow.html'
+
+    def visible_user(self):
+        return get_object_or_404(get_user_model(), username=self.kwargs.get('username'))
+
+    def get(self, request):
+        followers = Follow.objects.filter(following=self.visible_user()).order_by('-date')
+        context = {
+            'follow': followers
+        }
+        return render(request, self.template_name, context)
+
+
+class FollowersView(TemplateView):
+
+    template_name = 'user/follow.html'
+
+    def visible_user(self):
+        return get_object_or_404(get_user_model(), username=self.kwargs.get('username'))
+
+    def get(self, request):
+        followers = Follow.objects.filter(follower=self.visible_user()).order_by('-date')
+        context = {
+            'follow': followers
+        }
+        return render(request, self.template_name, context)

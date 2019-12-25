@@ -11,7 +11,7 @@ class PostsListView(ListView):
 
     def get(self, request):
         user = request.user
-        followers = user.who_follows.all()
+        followers = user.follower.all()
         follow_list = [user]
         for f in followers:
             follow_list.append(f.follower)
