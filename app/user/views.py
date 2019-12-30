@@ -9,10 +9,9 @@ from user.forms import UserSignupForm, UserLoginForm, UserProfileForm
 from django.contrib.auth import get_user_model
 from doodle.models import Post
 from user.models import Profile, Follow
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-
-
-class UsersProfileView(TemplateView):
+class UsersProfileView(LoginRequiredMixin,TemplateView):
 
     template_name = 'user/users_profile.html'
 

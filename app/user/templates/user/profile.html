@@ -21,7 +21,7 @@
 {% endthumbnail %}
   
 <a href="{% url 'user:user-followers' profile.username %}">
-    {{ profile.profile.follower }}
+    {{ profile.profile.followers }}
     follower
 </a>        
 <a href="{% url 'user:user-follows' profile.username %}">

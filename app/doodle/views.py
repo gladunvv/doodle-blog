@@ -4,14 +4,16 @@ from doodle.models import Post, Comment, Tag
 from user.models import Follow
 from django.contrib.auth import get_user_model
 from doodle.forms import AddCommentForm, AddPost
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-class PostsListView(ListView):
+
+class PostsListView(LoginRequiredMixin,ListView):
 
     template_name = 'doodle/index.html'
 
     def get(self, request):
         user = request.user
-        followers = user.follower.all()
+        followers = user.who_follows.all()
         follow_list = [user]
         for f in followers:
             follow_list.append(f.follower)
@@ -23,7 +25,7 @@ class PostsListView(ListView):
         return render(request, self.template_name, context)    
 
 
-class PostDetailView(TemplateView):
+class PostDetailView(LoginRequiredMixin,TemplateView):
 
     template_name = 'doodle/post_detail.html'
 
@@ -52,7 +54,7 @@ class PostDetailView(TemplateView):
         return render(request, self.template_name, context)
 
 
-class CreatePost(TemplateView):
+class CreatePost(LoginRequiredMixin,TemplateView):
 
     template_name = 'doodle/added_post.html'
 
@@ -79,7 +81,7 @@ class CreatePost(TemplateView):
         }
         return render(request, self.template_name, context)
 
-class DeletePost(TemplateView):
+class DeletePost(LoginRequiredMixin,TemplateView):
 
     template_name = 'doodle/delete_post.html'
 

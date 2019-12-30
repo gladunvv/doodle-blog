@@ -17,11 +17,11 @@ class Profile(models.Model):
 
     @property
     def followers(self):
-        return Follow.objects.filter(who_is_followed=self.user).count()
+        return Follow.objects.filter(following=self.user).count()
 
     @property
     def following(self):
-        return Follow.objects.filter(who_follows=self.user).count()
+        return Follow.objects.filter(follower=self.user).count()
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
