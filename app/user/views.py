@@ -165,10 +165,10 @@ class FollowsView(TemplateView):
     def visible_user(self):
         return get_object_or_404(get_user_model(), username=self.kwargs.get('username'))
 
-    def get(self, request):
-        followers = Follow.objects.filter(following=self.visible_user()).order_by('-date')
+    def get(self, request, *args, **kwargs):
+        followers = Follow.objects.filter(follower=self.visible_user()).order_by('-follow_time')
         context = {
-            'follow': followers
+            'followers': followers
         }
         return render(request, self.template_name, context)
 
@@ -180,9 +180,9 @@ class FollowersView(TemplateView):
     def visible_user(self):
         return get_object_or_404(get_user_model(), username=self.kwargs.get('username'))
 
-    def get(self, request):
-        followers = Follow.objects.filter(follower=self.visible_user()).order_by('-date')
+    def get(self, request, *args, **kwargs):
+        followers = Follow.objects.filter(following=self.visible_user()).order_by('-follow_time')
         context = {
-            'follow': followers
+            'follows': followers
         }
         return render(request, self.template_name, context)

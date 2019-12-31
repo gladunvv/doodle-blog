@@ -33,6 +33,16 @@
             </button>
         </div>
     </form>
+    <br>
+    <a href="{% url 'user:user-followers' profile.username %}">
+        {{ profile.profile.followers }}
+        follower
+    </a>        
+    <a href="{% url 'user:user-follows' profile.username %}">
+        {{ profile.profile.following }}
+        followers
+    </a>
+    <br>
     {% for post in posts %}
 
         {{ post.text }} <br>
