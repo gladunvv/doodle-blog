@@ -19,6 +19,8 @@ class UsersProfileView(LoginRequiredMixin,TemplateView):
         return get_object_or_404(get_user_model(), username=self.kwargs.get('username'))
 
     def get(self, request, **kwargs):
+        if request.user == self.visible_user():
+            return redirect('user:profile')
         posts = Post.objects.filter(author=self.visible_user())
         context = {
             'profile': self.visible_user(),

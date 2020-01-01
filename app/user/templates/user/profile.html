@@ -16,7 +16,7 @@
     {{profile.profile.bio}}
     {{profile.profile.birth_date}}
 
-    {% thumbnail profile.profile.avatar "100x100" crop="center" as av %}
+{% thumbnail profile.profile.avatar "100x100" crop="center" as av %}
     <img style="margin:{{ av|margin:"100x100" }}" src="{{ av.url }}" width="{{ av.x }}" height="{{ av.y }}">
 {% endthumbnail %}
   
