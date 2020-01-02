@@ -1,41 +1,80 @@
 {% extends 'doodle/base.html' %}
 {% load thumbnail %}
+
 {% block content %}
-    <h1>
-        {{ profile.first_name }} {{ profile.last_name }}
-    </h1>
+<h1 class="title title_name">
+    Профиль: {{ profile.first_name }} {{ profile.last_name }}
+</h1>
+<h2 class="title title_user">
+     username: {{ profile.username }}!
+</h2>
 
-<a href="{% url "user:delete" %}">УДАЛИТЬ АККАУНТ</a>
+<a href="{% url "user:delete" %}">
+    <button type="button" class="btn btn-danger">
+        УДАЛИТЬ АККАУНТ
+    </button>
+</a>
     <h2>
-        <a href="{% url "user:profile_update" %}">
-
-            Hello {{ profile.username }}!
-        </a>
+        Hello {{ profile.username }}!
+        
     </h2>
 
-    {{profile.profile.bio}}
-    {{profile.profile.birth_date}}
+<a class="user_data_update "href="{% url "user:profile_update" %}">
+    <button type="button" class="btn btn-secondary">
+        Обновить данные
+    </button>
+</a>
+
+    <p class="bio">
+        {% if profile.profile.bio %}
+        {{ profile.profile.bio }}
+        {% endif %}
+    </p>
+    <p class="birth_date">
+        {% if profile.profile.birth_date %}
+        {{ profile.profile.birth_date }}
+        {% endif %}
+    </p>
 
 {% thumbnail profile.profile.avatar "100x100" crop="center" as av %}
-    <img style="margin:{{ av|margin:"100x100" }}" src="{{ av.url }}" width="{{ av.x }}" height="{{ av.y }}">
+<img class="avatar" style="margin:{{ av|margin:"100x100" }}" src="{{ av.url }}" width="{{ av.x }}" height="{{ av.y }}">
 {% endthumbnail %}
-  
+
 <a href="{% url 'user:user-followers' profile.username %}">
-    {{ profile.profile.followers }}
-    follower
-</a>        
+    <button type="button" class="btn btn-secondary">
+        Follower
+            <span class="badge badge-light">{{ profile.profile.followers }}</span>
+        </button>  
+    </a>
+    
+
 <a href="{% url 'user:user-follows' profile.username %}">
-    {{ profile.profile.following }}
-    followers
+<button type="button" class="btn btn-secondary">
+    Followers
+        <span class="badge badge-light">{{ profile.profile.following }}</span>
+    </button>  
 </a>
+
     <br>
     <br>
-    <a href="{% url "doodle:create_post" %}">Create New Post</a> <br>
+<a class="create_post" href="{% url "doodle:create_post" %}">
+    <button type="button" class="btn btn-success">
+        Create New Post
+    </button>
+</a> <br>
+
     {% for post in posts %}
-
-        {{ post.text }} <br>
-        {{ post.published_date }} <br>
-        <a href="{% url "doodle:delete_post" post.id %}">Delete Post</a><br><br> 
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h6 class="card-subtitle mb-2 text-muted">{{ post.published_date }}</h6>
+          <p class="card-text">{{ post.text }}</p>
+          <a href="{% url "doodle:delete_post" post.id %}" class="card-link">
+              <button type="button" class="btn btn-danger">
+                Delete Post
+                </button> 
+            </a>
+        </div>
+      </div>
     {% endfor %}
-
+        
 {% endblock %}

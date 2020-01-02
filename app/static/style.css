@@ -30,3 +30,7 @@ a {
 .post {
     border-color: black;
 }
+
+a {
+    text-decoration: none;
+}
