@@ -5,7 +5,7 @@ django-dob-widget==1.1.3
 django-environ==0.4.5
 environ==1.0
 migrate==0.3.8
-Pillow==6.2.1
+Pillow==8.3.2
 pkg-resources==0.0.0
 psycopg2-binary==2.8.4
 pytz==2019.3
